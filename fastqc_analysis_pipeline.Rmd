@@ -1,0 +1,88 @@
+
+---
+title: "FastQC Analysis Pipeline"
+author: "Rajnikant Dixit and Tanvi Singh"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Step 1: Install and Load Necessary Libraries
+
+```{r install-libraries}
+# Install and load necessary libraries
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("fastqcr")
+library(fastqcr)
+```
+
+## Step 2: Run FastQC
+
+```{r run-fastqc}
+# Function to run FastQC
+run_fastqc <- function(input_fastq, output_dir) {
+  # Ensure output directory exists
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  
+  # Run FastQC
+  fastqc(input_fastq, outdir = output_dir)
+}
+
+# Example usage
+input_fastq <- "example.fastq"
+output_dir <- "fastqc_results"
+run_fastqc(input_fastq, output_dir)
+```
+
+## Step 3: Summarize FastQC Results
+
+```{r summarize-results}
+# Function to summarize FastQC results
+summarize_fastqc <- function(output_dir) {
+  # Read FastQC results
+  qc <- qc_read(output_dir)
+  
+  # Create summary report
+  summary <- qc_summary(qc)
+  
+  # Print summary
+  print(summary)
+  
+  # Return summary
+  return(summary)
+}
+
+# Example usage
+fastqc_summary <- summarize_fastqc(output_dir)
+```
+
+## Step 4: Visualize FastQC Results
+
+```{r visualize-results}
+# Function to visualize FastQC results
+visualize_fastqc <- function(output_dir) {
+  # Read FastQC results
+  qc <- qc_read(output_dir)
+  
+  # Plot quality control metrics
+  qc_plot(qc)
+}
+
+# Example usage
+visualize_fastqc(output_dir)
+```
+
+## Summary
+
+In this pipeline, we have:
+1. Installed and loaded necessary libraries for FastQC analysis.
+2. Run FastQC on the input FASTQ file.
+3. Summarized the FastQC results.
+4. Visualized the FastQC results using various quality control metrics.
